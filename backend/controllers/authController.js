@@ -1,5 +1,4 @@
 import User from '../models/User.js';
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 // Admin/Any User Login Controller
@@ -18,13 +17,6 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { id: user._id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
-    );
-
     // Prepare user payload
     const userData = {
       id: user._id,
@@ -40,7 +32,6 @@ export const login = async (req, res) => {
     if (user.section) userData.section = user.section;
 
     res.status(200).json({
-      token,
       user: userData,
     });
 
